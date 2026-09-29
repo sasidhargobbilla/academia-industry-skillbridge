@@ -1,0 +1,1873 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EduBridge | Academia-Industry Collaboration & Career Portal</title>
+  <!-- Google Fonts & Font Awesome Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    /* ==========================================================================
+       1. GLOBAL STYLES & VARIABLES
+       ========================================================================== */
+    :root {
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --primary-light: #eff6ff;
+      --secondary: #0f172a;
+      --accent: #06b6d4;
+      --accent-light: #e0f2fe;
+      --success: #10b981;
+      --success-light: #dcfce7;
+      --warning: #f59e0b;
+      --warning-light: #fef3c7;
+      --danger: #ef4444;
+      --danger-light: #fee2e2;
+      --purple: #8b5cf6;
+      --purple-light: #f3e8ff;
+      --gray-50: #f8fafc;
+      --gray-100: #f1f5f9;
+      --gray-200: #e2e8f0;
+      --gray-300: #cbd5e1;
+      --gray-400: #94a3b8;
+      --gray-600: #475569;
+      --gray-700: #334155;
+      --gray-800: #1e293b;
+      --gray-900: #0f172a;
+      --radius-sm: 8px;
+      --radius: 12px;
+      --radius-lg: 20px;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+      --shadow: 0 4px 12px rgba(0,0,0,0.08);
+      --shadow-lg: 0 12px 32px rgba(0,0,0,0.12);
+      --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    body {
+      background-color: var(--gray-50);
+      color: var(--gray-800);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    a { text-decoration: none; color: inherit; }
+    ul { list-style: none; }
+
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: var(--gray-100); }
+    ::-webkit-scrollbar-thumb { background: var(--gray-300); border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--gray-400); }
+
+    /* ==========================================================================
+       2. REUSABLE UTILITIES
+       ========================================================================== */
+    .container {
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 0 1.5rem;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      padding: 0.8rem 1.6rem;
+      border-radius: var(--radius-sm);
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: var(--transition);
+      border: none;
+      outline: none;
+    }
+
+    .btn-primary { background: var(--primary); color: white; }
+    .btn-primary:hover { background: var(--primary-dark); transform: translateY(-2px); box-shadow: 0 6px 16px rgba(37,99,235,0.3); }
+
+    .btn-secondary { background: var(--secondary); color: white; }
+    .btn-secondary:hover { background: var(--gray-800); transform: translateY(-2px); }
+
+    .btn-outline { background: transparent; border: 2px solid var(--primary); color: var(--primary); }
+    .btn-outline:hover { background: var(--primary-light); }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      padding: 0.3rem 0.8rem;
+      border-radius: 50px;
+      font-size: 0.8rem;
+      font-weight: 700;
+    }
+
+    .badge-primary { background: var(--primary-light); color: var(--primary); }
+    .badge-success { background: var(--success-light); color: #15803d; }
+    .badge-warning { background: var(--warning-light); color: #b45309; }
+    .badge-purple { background: var(--purple-light); color: var(--purple); }
+
+    .section-header {
+      text-align: center;
+      max-width: 780px;
+      margin: 0 auto 3.5rem;
+    }
+
+    .section-title {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: var(--secondary);
+      margin-bottom: 0.8rem;
+    }
+
+    .section-subtitle {
+      font-size: 1.1rem;
+      color: var(--gray-600);
+    }
+
+    /* Modal Styling */
+    .modal-overlay {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(15, 23, 42, 0.7);
+      backdrop-filter: blur(6px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+      opacity: 0;
+      visibility: hidden;
+      transition: var(--transition);
+      padding: 1rem;
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal-card {
+      background: white;
+      border-radius: var(--radius-lg);
+      width: 100%;
+      max-width: 750px;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 2.5rem;
+      box-shadow: var(--shadow-lg);
+      position: relative;
+      transform: translateY(20px);
+      transition: var(--transition);
+    }
+
+    .modal-overlay.active .modal-card {
+      transform: translateY(0);
+    }
+
+    .close-modal {
+      position: absolute;
+      top: 1.25rem; right: 1.25rem;
+      font-size: 1.4rem;
+      color: var(--gray-400);
+      cursor: pointer;
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      transition: var(--transition);
+    }
+    .close-modal:hover { background: var(--gray-100); color: var(--gray-800); }
+
+    /* ==========================================================================
+       3. NAVIGATION BAR
+       ========================================================================== */
+    .navbar {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(12px);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      border-bottom: 1px solid var(--gray-200);
+    }
+
+    .nav-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 80px;
+    }
+
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--secondary);
+    }
+
+    .brand-logo i { color: var(--primary); font-size: 1.8rem; }
+
+    .nav-menu {
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+    }
+
+    .nav-link {
+      font-weight: 600;
+      color: var(--gray-600);
+      transition: var(--transition);
+      font-size: 0.92rem;
+      padding: 0.4rem 0.8rem;
+      border-radius: var(--radius-sm);
+    }
+
+    .nav-link:hover, .nav-link.active {
+      color: var(--primary);
+      background: var(--primary-light);
+    }
+
+    /* ==========================================================================
+       4. HERO SECTION
+       ========================================================================== */
+    .hero {
+      padding: 5rem 0 4rem;
+      background: linear-gradient(135deg, #f8fafc 0%, #eff6ff 100%);
+      border-bottom: 1px solid var(--gray-200);
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 3.5rem;
+      align-items: center;
+    }
+
+    .hero-title {
+      font-size: 3.2rem;
+      font-weight: 800;
+      line-height: 1.15;
+      color: var(--secondary);
+      margin-bottom: 1.2rem;
+    }
+
+    /* Fixed background-clip warning with both prefixed and standard CSS */
+    .hero-title span {
+      background: linear-gradient(120deg, var(--primary), var(--accent));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-desc {
+      font-size: 1.15rem;
+      color: var(--gray-600);
+      margin-bottom: 2rem;
+    }
+
+    .hero-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+      margin-top: 2.5rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--gray-300);
+    }
+
+    .stat-card h3 {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--primary);
+    }
+
+    .stat-card p {
+      font-size: 0.88rem;
+      color: var(--gray-600);
+      font-weight: 600;
+    }
+
+    .hero-dashboard-preview {
+      background: white;
+      border-radius: var(--radius-lg);
+      padding: 1.8rem;
+      box-shadow: var(--shadow-lg);
+      border: 1px solid var(--gray-200);
+    }
+
+    /* ==========================================================================
+       5. PLACEMENTS & ROLES
+       ========================================================================== */
+    .placements-section {
+      padding: 6rem 0;
+      background: white;
+    }
+
+    .category-pills {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.8rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .pill-btn {
+      padding: 0.75rem 1.4rem;
+      border-radius: 50px;
+      border: 1px solid var(--gray-300);
+      background: white;
+      font-weight: 600;
+      color: var(--gray-700);
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .pill-btn:hover, .pill-btn.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+      box-shadow: 0 4px 12px rgba(37,99,235,0.25);
+    }
+
+    .search-filter-box {
+      background: var(--gray-50);
+      padding: 1.25rem;
+      border-radius: var(--radius);
+      border: 1px solid var(--gray-200);
+      margin-bottom: 2.5rem;
+      display: flex;
+      gap: 1rem;
+    }
+
+    .search-input-wrap {
+      flex: 1;
+      position: relative;
+    }
+
+    .search-input-wrap i {
+      position: absolute;
+      left: 1.2rem; top: 50%;
+      transform: translateY(-50%);
+      color: var(--gray-400);
+    }
+
+    .search-input-wrap input {
+      width: 100%;
+      padding: 0.8rem 1rem 0.8rem 3rem;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--gray-300);
+      font-size: 0.95rem;
+      outline: none;
+    }
+
+    .roles-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+      gap: 1.8rem;
+    }
+
+    .role-card {
+      background: white;
+      border-radius: var(--radius);
+      border: 1px solid var(--gray-200);
+      padding: 1.8rem;
+      transition: var(--transition);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      cursor: pointer;
+    }
+
+    .role-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+      border-color: var(--primary);
+    }
+
+    .role-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 1rem;
+    }
+
+    .role-icon-box {
+      width: 50px; height: 50px;
+      border-radius: 12px;
+      background: var(--primary-light);
+      color: var(--primary);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem;
+    }
+
+    .role-title {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--secondary);
+      margin-bottom: 0.3rem;
+    }
+
+    .role-company {
+      font-size: 0.9rem;
+      color: var(--gray-600);
+      font-weight: 500;
+      margin-bottom: 1rem;
+    }
+
+    .role-skills-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .skill-tag {
+      background: var(--gray-100);
+      color: var(--gray-700);
+      font-size: 0.78rem;
+      font-weight: 600;
+      padding: 0.25rem 0.6rem;
+      border-radius: 4px;
+    }
+
+    /* Fixed layout alignment replacing justify-style */
+    .role-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 1rem;
+      border-top: 1px solid var(--gray-100);
+    }
+
+    .role-ctc {
+      font-weight: 800;
+      color: var(--secondary);
+      font-size: 1.05rem;
+    }
+
+    /* ==========================================================================
+       6. MOCK INTERVIEWS
+       ========================================================================== */
+    .mock-interviews-section {
+      padding: 6rem 0;
+      background: var(--gray-50);
+    }
+
+    .interview-tracks-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(380px, 1fr));
+      gap: 2rem;
+    }
+
+    .track-card {
+      background: white;
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      border: 1px solid var(--gray-200);
+      box-shadow: var(--shadow);
+    }
+
+    .track-head {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .track-head i {
+      font-size: 2rem;
+      color: var(--primary);
+    }
+
+    .round-step {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      padding: 0.9rem 0;
+      border-bottom: 1px dashed var(--gray-200);
+    }
+
+    .round-number {
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      background: var(--primary-light);
+      color: var(--primary);
+      font-weight: 700;
+      font-size: 0.85rem;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .round-details h5 {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--secondary);
+    }
+
+    .round-details p {
+      font-size: 0.85rem;
+      color: var(--gray-600);
+    }
+
+    /* ==========================================================================
+       7. MOCK TESTS ENGINE
+       ========================================================================== */
+    .mock-tests-section {
+      padding: 6rem 0;
+      background: white;
+    }
+
+    .tests-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .test-card {
+      background: var(--gray-50);
+      border-radius: var(--radius);
+      padding: 1.8rem;
+      border: 1px solid var(--gray-200);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .test-meta {
+      display: flex;
+      gap: 1rem;
+      font-size: 0.85rem;
+      color: var(--gray-600);
+      margin: 1rem 0 1.5rem;
+    }
+
+    .option-btn {
+      width: 100%;
+      text-align: left;
+      padding: 0.9rem 1.2rem;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--gray-300);
+      background: white;
+      font-weight: 600;
+      margin-bottom: 0.6rem;
+      cursor: pointer;
+      transition: var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .option-btn:hover {
+      background: var(--primary-light);
+      border-color: var(--primary);
+    }
+
+    .option-btn.selected {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    .option-btn.correct-ans {
+      background: var(--success-light) !important;
+      color: #15803d !important;
+      border-color: var(--success) !important;
+    }
+
+    .option-btn.wrong-ans {
+      background: var(--danger-light) !important;
+      color: var(--danger) !important;
+      border-color: var(--danger) !important;
+    }
+
+    /* ==========================================================================
+       8. SKILL LEARNING & RESUME MATCHER
+       ========================================================================== */
+    .learning-section {
+      padding: 6rem 0;
+      background: var(--gray-50);
+    }
+
+    .course-card {
+      background: white;
+      border-radius: var(--radius);
+      overflow: hidden;
+      border: 1px solid var(--gray-200);
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .course-banner {
+      height: 160px;
+      background: linear-gradient(135deg, var(--primary), var(--accent));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 3.5rem;
+    }
+
+    .course-body {
+      padding: 1.5rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    /* RESUME MATCHER MODULE */
+    .resume-matcher-section {
+      padding: 6rem 0;
+      background: white;
+    }
+
+    .matcher-box {
+      background: var(--gray-50);
+      border-radius: var(--radius-lg);
+      padding: 2.5rem;
+      border: 1px solid var(--gray-200);
+    }
+
+    .matcher-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+    }
+
+    .text-area-custom {
+      width: 100%;
+      height: 180px;
+      padding: 1rem;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--gray-300);
+      font-size: 0.95rem;
+      outline: none;
+      resize: vertical;
+    }
+
+    /* ==========================================================================
+       9. FOOTER
+       ========================================================================== */
+    .footer {
+      background: var(--gray-900);
+      color: white;
+      padding: 5rem 0 2rem;
+    }
+
+    .footer-grid {
+      display: grid;
+      grid-template-columns: 2fr repeat(3, 1fr);
+      gap: 3rem;
+      margin-bottom: 4rem;
+    }
+
+    .footer-brand p {
+      color: var(--gray-400);
+      margin-top: 1rem;
+      font-size: 0.95rem;
+      max-width: 340px;
+    }
+
+    .footer-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 1.25rem;
+    }
+
+    .footer-links li { margin-bottom: 0.7rem; }
+    .footer-links a { color: var(--gray-400); transition: var(--transition); font-size: 0.9rem; }
+    .footer-links a:hover { color: white; }
+
+    .footer-bottom {
+      border-top: 1px solid var(--gray-800);
+      padding-top: 2rem;
+      display: flex;
+      justify-content: space-between;
+      color: var(--gray-400);
+      font-size: 0.88rem;
+    }
+
+    @media (max-width: 992px) {
+      .hero-grid, .matcher-grid { grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 768px) {
+      .nav-menu { display: none; }
+      .search-filter-box { flex-direction: column; }
+      .footer-grid { grid-template-columns: 1fr; }
+      .footer-bottom { flex-direction: column; text-align: center; gap: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVIGATION -->
+  <nav class="navbar">
+    <div class="container nav-container">
+      <a href="#" class="brand-logo">
+        <i class="fa-solid fa-graduation-cap"></i>
+        <span>EduBridge</span>
+      </a>
+
+      <ul class="nav-menu">
+        <li><a href="#placements" class="nav-link active">Placements & Roles</a></li>
+        <li><a href="#mock-interviews" class="nav-link">Mock Interviews</a></li>
+        <li><a href="#mock-tests" class="nav-link">Mock Tests</a></li>
+        <li><a href="#skill-learning" class="nav-link">Skill Learning</a></li>
+        <li><a href="#resume-matcher" class="nav-link">Skill Matcher</a></li>
+      </ul>
+
+      <div style="display: flex; gap: 1rem;">
+        <button class="btn btn-outline" onclick="openModal('loginModal')">Student Login</button>
+        <button class="btn btn-primary" onclick="openModal('loginModal')">Recruiter Portal</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO SECTION -->
+  <header class="hero">
+    <div class="container hero-grid">
+      <div>
+        <span class="badge badge-primary" style="margin-bottom: 1rem;"><i class="fa-solid fa-bolt"></i> Academia-Industry Placement Platform</span>
+        <h1 class="hero-title">Bridge Your <span>Skill Gap</span> & Crack <span>Top Jobs</span></h1>
+        <p class="hero-desc">Interactive learning modules, real-time mock tests, simulated multi-round AI interviews, and targeted campus placements for Fullstack, GenAI, Python, Cybersecurity, AI/ML, Data Science, and Agile Scrum roles.</p>
+
+        <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+          <a href="#placements" class="btn btn-primary"><i class="fa-solid fa-briefcase"></i> Explore Open Jobs</a>
+          <a href="#mock-interviews" class="btn btn-secondary"><i class="fa-solid fa-comments"></i> Start Mock Interview</a>
+        </div>
+
+        <div class="hero-stats-grid">
+          <div class="stat-card">
+            <h3>2,100+</h3>
+            <p>Active Job Roles</p>
+          </div>
+          <div class="stat-card">
+            <h3>350+</h3>
+            <p>Practice Mock Tests</p>
+          </div>
+          <div class="stat-card">
+            <h3>97.2%</h3>
+            <p>Placement Rate</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-dashboard-preview">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;">
+          <h4 style="font-weight:800; font-size:1.1rem;">My Career Readiness Tracker</h4>
+          <span class="badge badge-success">89% Match</span>
+        </div>
+
+        <div style="margin-bottom: 1.2rem;">
+          <div style="display:flex; justify-content:space-between; font-weight:600; font-size:0.88rem; margin-bottom:0.4rem;">
+            <span>MERN Stack & GenAI</span>
+            <span>94%</span>
+          </div>
+          <div style="background:var(--gray-200); height:8px; border-radius:4px; overflow:hidden;">
+            <div style="width:94%; background:var(--primary); height:100%;"></div>
+          </div>
+        </div>
+
+        <div style="margin-bottom: 1.2rem;">
+          <div style="display:flex; justify-content:space-between; font-weight:600; font-size:0.88rem; margin-bottom:0.4rem;">
+            <span>Python & Backend Architecture</span>
+            <span>86%</span>
+          </div>
+          <div style="background:var(--gray-200); height:8px; border-radius:4px; overflow:hidden;">
+            <div style="width:86%; background:var(--purple); height:100%;"></div>
+          </div>
+        </div>
+
+        <div style="margin-bottom: 1.5rem;">
+          <div style="display:flex; justify-content:space-between; font-weight:600; font-size:0.88rem; margin-bottom:0.4rem;">
+            <span>Agile Scrum & Stakeholder Comms</span>
+            <span>80%</span>
+          </div>
+          <div style="background:var(--gray-200); height:8px; border-radius:4px; overflow:hidden;">
+            <div style="width:80%; background:var(--accent); height:100%;"></div>
+          </div>
+        </div>
+
+        <button class="btn btn-primary" style="width:100%;" onclick="startInterview('Full Stack & Gen AI')"><i class="fa-solid fa-play"></i> Launch Mock Interview Round</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- 1. PLACEMENTS & ROLES SECTION -->
+  <section class="placements-section" id="placements">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Placements & Job Openings</h2>
+        <p class="section-subtitle">Click on any role card to view full job specifications, syllabus requirements, CTC packages, and immediate interview scheduling.</p>
+      </div>
+
+      <!-- FILTER CATEGORIES -->
+      <div class="category-pills" id="categoryPills">
+        <button class="pill-btn active" onclick="filterRoles('all', this)"><i class="fa-solid fa-border-all"></i> All Categories</button>
+        <button class="pill-btn" onclick="filterRoles('fullstack', this)"><i class="fa-solid fa-code"></i> Full Stack Development</button>
+        <button class="pill-btn" onclick="filterRoles('genai', this)"><i class="fa-solid fa-brain"></i> MERN & GenAI</button>
+        <button class="pill-btn" onclick="filterRoles('python', this)"><i class="fa-brands fa-python"></i> Python Backend</button>
+        <button class="pill-btn" onclick="filterRoles('cyber', this)"><i class="fa-solid fa-shield-halved"></i> Cybersecurity</button>
+        <button class="pill-btn" onclick="filterRoles('aiml', this)"><i class="fa-solid fa-robot"></i> AI / ML Engineers</button>
+        <button class="pill-btn" onclick="filterRoles('data', this)"><i class="fa-solid fa-chart-pie"></i> Data Science & Analytics</button>
+        <button class="pill-btn" onclick="filterRoles('agile', this)"><i class="fa-solid fa-users-gear"></i> Stakeholder & Scrum Master</button>
+      </div>
+
+      <!-- SEARCH FILTER BAR -->
+      <div class="search-filter-box">
+        <div class="search-input-wrap">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input type="text" id="roleSearch" placeholder="Search by role title, technology (React, Python, LangChain, Ethical Hacking)..." onkeyup="searchRoles()">
+        </div>
+        <select id="typeFilter" onchange="searchRoles()" style="padding: 0.8rem; border-radius: var(--radius-sm); border:1px solid var(--gray-300); background:white; font-weight:600;">
+          <option value="all">All Role Types</option>
+          <option value="Placement">Full-Time Placement</option>
+          <option value="Internship">Internship Role</option>
+        </select>
+      </div>
+
+      <!-- ROLES CONTAINER GRID -->
+      <div class="roles-grid" id="rolesContainer">
+        <!-- Rendered dynamically through JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- 2. MOCK INTERVIEWS ENGINE -->
+  <section class="mock-interviews-section" id="mock-interviews">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Multi-Round Mock Interview Simulator</h2>
+        <p class="section-subtitle">Select your target technology track to launch simulated technical screening, system design, and hiring manager interview rounds.</p>
+      </div>
+
+      <div class="interview-tracks-grid">
+        <!-- Track 1 -->
+        <div class="track-card">
+          <div class="track-head">
+            <i class="fa-solid fa-laptop-code"></i>
+            <div>
+              <h3 style="font-size:1.2rem; font-weight:800;">Full Stack & Gen AI Track</h3>
+              <span class="badge badge-primary">4-Round Interview Suite</span>
+            </div>
+          </div>
+
+          <div class="round-step">
+            <div class="round-number">1</div>
+            <div class="round-details">
+              <h5>Technical MCQ & DSA Screening</h5>
+              <p>Arrays, Async JavaScript, React State & API concepts (30 Mins)</p>
+            </div>
+          </div>
+
+          <div class="round-step">
+            <div class="round-number">2</div>
+            <div class="round-details">
+              <h5>Practical Coding & GenAI Integration</h5>
+              <p>Build a real-time Express backend & LangChain pipeline (60 Mins)</p>
+            </div>
+          </div>
+
+          <div class="round-step">
+            <div class="round-number">3</div>
+            <div class="round-details">
+              <h5>System Architecture & Database Scaling</h5>
+              <p>Vector database indexing, Redis caching & Docker deployment (45 Mins)</p>
+            </div>
+          </div>
+
+          <div class="round-step">
+            <div class="round-number">4</div>
+            <div class="round-details">
+              <h5>Managerial & Project Scenario Round</h5>
+              <p>Agile sprint management, code reviews & team communication (30 Mins)</p>
+            </div>
+          </div>
+
+          <button class="btn btn-primary" style="width:100%; margin-top:1.5rem;" onclick="startInterview('Full Stack & Gen AI Track')">Start Fullstack Interview Round</button>
+        </div>
+
+        <!-- Track 2 -->
+        <div class="track-card">
+          <div class="track-head">
+            <i class="fa-solid fa-shield-halved" style="color:var(--purple);"></i>
+            <div>
+              <h3 style="font-size:1.2rem; font-weight:800;">Cybersecurity & Network Auditing</h3>
+              <span class="badge badge-purple">3-Round Security Suite</span>
+            </div>
+          </div>
+
+          <div class="round-step">
+            <div class="round-number">1</div>
+            <div class="round-details">
+              <h5>Network Protocol & OWASP Security</h5>
+              <p>TCP/IP, SSL/TLS, SQL injection & XSS vulnerabilities (30 Mins)</p>
+            </div>
+          </div>
+
+          <div class="round-step">
+            <div class="round-number">2</div>
+            <div class="round-details">
+              <h5>Log Analysis & Threat Mitigation</h5>
+              <p>Packet analysis in Wireshark and SIEM event response (60 Mins)</p>
+            </div>
+          </div>
+
+          <div class="round-step">
+            <div class="round-number">3</div>
+            <div class="round-details">
+              <h5>Compliance & Governance Assessment</h5>
+              <p>ISO27001, IAM policy structures & breach management (45 Mins)</p>
+            </div>
+          </div>
+
+          <button class="btn btn-primary" style="width:100%; margin-top:1.5rem; background:var(--purple);" onclick="startInterview('Cybersecurity & Security Audit Track')">Start Security Interview Round</button>
+        </div>
+
+        <!-- Track 3 -->
+        <div class="track-card">
+          <div class="track-head">
+            <i class="fa-solid fa-users-gear" style="color:var(--accent);"></i>
+            <div>
+              <h3 style="font-size:1.2rem; font-weight:800;">Scrum Master & Stakeholder Track</h3>
+              <span class="badge badge-warning">3-Round Agile Suite</span>
+            </div>
+          </div>
+
+          <div class="round-step">
+            <div class="round-number">1</div>
+            <div class="round-details">
+              <h5>Agile Framework & Sprint Lifecycle</h5>
+              <p>Backlog refinement, burndown charts & velocity metrics (30 Mins)</p>
+            </div>
+          </div>
+
+          <div class="round-step">
+            <div class="round-number">2</div>
+            <div class="round-details">
+              <h5>Stakeholder Negotiation & Blockers</h5>
+              <p>Resolving scope creep and cross-team dependencies (45 Mins)</p>
+            </div>
+          </div>
+
+          <div class="round-step">
+            <div class="round-number">3</div>
+            <div class="round-details">
+              <h5>Product Roadmap Presentation</h5>
+              <p>Feature prioritization matrix and executive reporting (45 Mins)</p>
+            </div>
+          </div>
+
+          <button class="btn btn-primary" style="width:100%; margin-top:1.5rem; background:var(--secondary);" onclick="startInterview('Scrum Master & Stakeholder Track')">Start Agile Interview Round</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. MOCK TESTS & LIVE QUIZ ENGINE -->
+  <section class="mock-tests-section" id="mock-tests">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Live Assessment & Mock Test Simulator</h2>
+        <p class="section-subtitle">Take real-time interactive technical tests with instant evaluation, scorecards, and explanation keys.</p>
+      </div>
+
+      <div class="tests-grid">
+        <div class="test-card">
+          <div>
+            <span class="badge badge-primary">Interactive Test</span>
+            <h4 style="font-size:1.15rem; font-weight:700; margin-top:0.8rem;">Full Stack & MERN Developer Test</h4>
+            <p style="font-size:0.88rem; color:var(--gray-600); margin-top:0.4rem;">React Virtual DOM, Node event loop, MongoDB indexing & REST standards.</p>
+            <div class="test-meta">
+              <span><i class="fa-regular fa-clock"></i> 5 Questions</span>
+              <span><i class="fa-solid fa-award"></i> Instant Evaluation</span>
+            </div>
+          </div>
+          <button class="btn btn-outline" style="width:100%;" onclick="launchLiveTest('mern')">Launch Interactive Test</button>
+        </div>
+
+        <div class="test-card">
+          <div>
+            <span class="badge badge-purple">Interactive Test</span>
+            <h4 style="font-size:1.15rem; font-weight:700; margin-top:0.8rem;">Generative AI & LLM Assessment</h4>
+            <p style="font-size:0.88rem; color:var(--gray-600); margin-top:0.4rem;">Vector embeddings, RAG architectures, prompt techniques & fine-tuning.</p>
+            <div class="test-meta">
+              <span><i class="fa-regular fa-clock"></i> 5 Questions</span>
+              <span><i class="fa-solid fa-award"></i> Instant Evaluation</span>
+            </div>
+          </div>
+          <button class="btn btn-outline" style="width:100%;" onclick="launchLiveTest('genai')">Launch Interactive Test</button>
+        </div>
+
+        <div class="test-card">
+          <div>
+            <span class="badge badge-success">Interactive Test</span>
+            <h4 style="font-size:1.15rem; font-weight:700; margin-top:0.8rem;">Cybersecurity & Penetration Testing</h4>
+            <p style="font-size:0.88rem; color:var(--gray-600); margin-top:0.4rem;">OWASP Top 10, Network penetration, encryption standards & security audits.</p>
+            <div class="test-meta">
+              <span><i class="fa-regular fa-clock"></i> 5 Questions</span>
+              <span><i class="fa-solid fa-award"></i> Instant Evaluation</span>
+            </div>
+          </div>
+          <button class="btn btn-outline" style="width:100%;" onclick="launchLiveTest('cyber')">Launch Interactive Test</button>
+        </div>
+
+        <div class="test-card">
+          <div>
+            <span class="badge badge-warning">Interactive Test</span>
+            <h4 style="font-size:1.15rem; font-weight:700; margin-top:0.8rem;">Agile Scrum Master Benchmark</h4>
+            <p style="font-size:0.88rem; color:var(--gray-600); margin-top:0.4rem;">Scrum ceremonies, team velocity, user story estimates & sprint retrospectives.</p>
+            <div class="test-meta">
+              <span><i class="fa-regular fa-clock"></i> 5 Questions</span>
+              <span><i class="fa-solid fa-award"></i> Instant Evaluation</span>
+            </div>
+          </div>
+          <button class="btn btn-outline" style="width:100%;" onclick="launchLiveTest('scrum')">Launch Interactive Test</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. SKILL LEARNING & ROADMAPS -->
+  <section class="learning-section" id="skill-learning">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Industry Curriculum & Skill Roadmaps</h2>
+        <p class="section-subtitle">Structured self-paced learning courses designed in partnership with corporate technical leaders.</p>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 2rem;">
+        <div class="course-card">
+          <div class="course-banner" style="background: linear-gradient(135deg, #2563eb, #1d4ed8);">
+            <i class="fa-brands fa-react"></i>
+          </div>
+          <div class="course-body">
+            <div>
+              <span class="badge badge-primary">Full Stack Track</span>
+              <h4 style="font-size:1.2rem; font-weight:700; margin-top:0.5rem;">MERN Stack & Cloud Deployment</h4>
+              <p style="font-size:0.88rem; color:var(--gray-600); margin-top:0.5rem;">Master React 18, Node microservices, Express security middleware, MongoDB indexing, and AWS EC2 deployments.</p>
+            </div>
+            <div style="margin-top:1.5rem; display:flex; justify-content:space-between; align-items:center;">
+              <span style="font-size:0.85rem; font-weight:700; color:var(--gray-600);">16 Modules • 48 Hours</span>
+              <button class="btn btn-primary" style="padding:0.4rem 1rem; font-size:0.85rem;" onclick="openCourseDetails('MERN Stack & Cloud Deployment')">View Curriculum</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="course-card">
+          <div class="course-banner" style="background: linear-gradient(135deg, #8b5cf6, #6d28d9);">
+            <i class="fa-solid fa-brain"></i>
+          </div>
+          <div class="course-body">
+            <div>
+              <span class="badge badge-purple">Generative AI</span>
+              <h4 style="font-size:1.2rem; font-weight:700; margin-top:0.5rem;">Production AI Agents & LangChain</h4>
+              <p style="font-size:0.88rem; color:var(--gray-600); margin-top:0.5rem;">Build Agentic workflows, integrate Pinecone vector search, fine-tune open-source models, and set up guardrails.</p>
+            </div>
+            <div style="margin-top:1.5rem; display:flex; justify-content:space-between; align-items:center;">
+              <span style="font-size:0.85rem; font-weight:700; color:var(--gray-600);">12 Modules • 36 Hours</span>
+              <button class="btn btn-primary" style="padding:0.4rem 1rem; font-size:0.85rem; background:var(--purple);" onclick="openCourseDetails('Production AI Agents & LangChain')">View Curriculum</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="course-card">
+          <div class="course-banner" style="background: linear-gradient(135deg, #10b981, #047857);">
+            <i class="fa-solid fa-shield"></i>
+          </div>
+          <div class="course-body">
+            <div>
+              <span class="badge badge-success">Cybersecurity</span>
+              <h4 style="font-size:1.2rem; font-weight:700; margin-top:0.5rem;">Practical Penetration Testing</h4>
+              <p style="font-size:0.88rem; color:var(--gray-600); margin-top:0.5rem;">Hands-on security audits, Kali Linux tools, network packet sniffing with Wireshark, and defensive hardening.</p>
+            </div>
+            <div style="margin-top:1.5rem; display:flex; justify-content:space-between; align-items:center;">
+              <span style="font-size:0.85rem; font-weight:700; color:var(--gray-600);">20 Modules • 55 Hours</span>
+              <button class="btn btn-primary" style="padding:0.4rem 1rem; font-size:0.85rem; background:var(--success);" onclick="openCourseDetails('Practical Penetration Testing')">View Curriculum</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. RESUME & SKILL MATCHER ENGINE -->
+  <section class="resume-matcher-section" id="resume-matcher">
+    <div class="container">
+      <div class="section-header">
+        <h2 class="section-title">Automated Skill Matcher</h2>
+        <p class="section-subtitle">Paste your key skills or resume text below to analyze your match score against target industry positions.</p>
+      </div>
+
+      <div class="matcher-box">
+        <div class="matcher-grid">
+          <div>
+            <label style="font-weight:700; font-size:0.95rem; display:block; margin-bottom:0.5rem;">Select Target Job Profile</label>
+            <select id="targetProfileSelect" style="width:100%; padding:0.8rem; border-radius:var(--radius-sm); border:1px solid var(--gray-300); font-weight:600; margin-bottom:1.2rem;">
+              <option value="MERN Stack Developer with GenAI Integration">MERN Stack Developer with GenAI Integration</option>
+              <option value="Cybersecurity Penetration Tester">Cybersecurity Penetration Tester</option>
+              <option value="Artificial Intelligence / ML Engineer">Artificial Intelligence / ML Engineer</option>
+              <option value="Agile Scrum Master">Agile Scrum Master</option>
+              <option value="Senior Data Scientist">Senior Data Scientist</option>
+            </select>
+
+            <label style="font-weight:700; font-size:0.95rem; display:block; margin-bottom:0.5rem;">Paste Resume Text / Skill List</label>
+            <textarea class="text-area-custom" id="userSkillsInput" placeholder="Paste your resume summary, technical skills (e.g. React, Node, MongoDB, Python, LangChain, SQL, Penetration Testing, Agile)..."></textarea>
+
+            <button class="btn btn-primary" style="width:100%; margin-top:1rem;" onclick="analyzeSkillMatch()"><i class="fa-solid fa-wand-magic-sparkles"></i> Analyze Match Score</button>
+          </div>
+
+          <div style="background:white; border-radius:var(--radius); padding:1.8rem; border:1px solid var(--gray-200); display:flex; flex-direction:column; justify-content:center;" id="matcherResultBox">
+            <div style="text-align:center; color:var(--gray-600);">
+              <i class="fa-solid fa-chart-pie" style="font-size:3rem; color:var(--gray-300); margin-bottom:1rem;"></i>
+              <h4 style="font-size:1.1rem; font-weight:700;">No Analysis Performed Yet</h4>
+              <p style="font-size:0.9rem;">Select a profile, paste your skills on the left, and click analyze.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MODALS SYSTEM -->
+
+  <!-- 1. ROLE DETAILS MODAL -->
+  <div class="modal-overlay" id="roleDetailModal">
+    <div class="modal-card">
+      <div class="close-modal" onclick="closeModal('roleDetailModal')">&times;</div>
+      <div id="roleDetailContent"></div>
+    </div>
+  </div>
+
+  <!-- 2. INTERVIEW SIMULATOR MODAL -->
+  <div class="modal-overlay" id="interviewModal">
+    <div class="modal-card">
+      <div class="close-modal" onclick="closeModal('interviewModal')">&times;</div>
+      <h3 id="modalTrackTitle" style="font-size:1.5rem; font-weight:800; margin-bottom:0.5rem;">Mock Interview Round</h3>
+      <p style="color:var(--gray-600); margin-bottom:1.5rem; font-size:0.95rem;">Answer the interactive technical questions below to evaluate your interview readiness.</p>
+      
+      <div id="interviewQuestionContainer" style="background:var(--gray-50); padding:1.5rem; border-radius:var(--radius); border:1px solid var(--gray-200); margin-bottom:1.5rem;">
+        <h5 style="font-size:1.05rem; font-weight:700; color:var(--secondary);" id="intQTitle">Question 1: React & GenAI</h5>
+        <p style="font-size:0.92rem; color:var(--gray-700); margin-top:0.5rem;" id="intQText">How do you manage real-time streaming tokens from an LLM response in a React frontend using EventSource or fetch ReadableStream?</p>
+        <textarea style="width:100%; height:100px; margin-top:1rem; padding:0.8rem; border-radius:8px; border:1px solid var(--gray-300);" id="intAnswerInput" placeholder="Type your technical answer here..."></textarea>
+      </div>
+
+      <div style="display:flex; justify-content:space-between;">
+        <button class="btn btn-outline" onclick="nextInterviewQuestion()">Next Question</button>
+        <button class="btn btn-primary" onclick="submitInterviewAnswer()">Submit Answer & Finish</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. LIVE TEST SIMULATOR MODAL -->
+  <div class="modal-overlay" id="testModal">
+    <div class="modal-card" style="max-width:800px;">
+      <div class="close-modal" onclick="closeModal('testModal')">&times;</div>
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.2rem; border-bottom:1px solid var(--gray-200); padding-bottom:1rem;">
+        <h3 id="testTitle" style="font-size:1.4rem; font-weight:800;">Interactive Mock Test</h3>
+        <span class="badge badge-warning" id="testTimer"><i class="fa-regular fa-clock"></i> 05:00</span>
+      </div>
+
+      <div id="testBody"></div>
+    </div>
+  </div>
+
+  <!-- 4. COURSE CURRICULUM MODAL -->
+  <div class="modal-overlay" id="courseModal">
+    <div class="modal-card">
+      <div class="close-modal" onclick="closeModal('courseModal')">&times;</div>
+      <h3 id="courseTitle" style="font-size:1.5rem; font-weight:800; margin-bottom:0.5rem;">Course Curriculum</h3>
+      <p style="color:var(--gray-600); margin-bottom:1.5rem;">Detailed syllabus modules verified by industry engineering leads.</p>
+      
+      <div id="courseModulesList" style="margin-bottom:1.5rem;"></div>
+      <button class="btn btn-primary" style="width:100%;" onclick="alert('Enrolled successfully! Materials added to your dashboard.'); closeModal('courseModal');">Enroll in Course</button>
+    </div>
+  </div>
+
+  <!-- 5. LOGIN MODAL -->
+  <div class="modal-overlay" id="loginModal">
+    <div class="modal-card" style="max-width:480px;">
+      <div class="close-modal" onclick="closeModal('loginModal')">&times;</div>
+      <h3 style="font-size:1.5rem; font-weight:800; margin-bottom:0.5rem;">Portal Sign In</h3>
+      <p style="color:var(--gray-600); margin-bottom:1.5rem; font-size:0.95rem;">Access student placement statistics, recruiter candidates, or campus assessments.</p>
+
+      <div style="margin-bottom:1rem;">
+        <label style="display:block; font-weight:600; font-size:0.88rem; margin-bottom:0.3rem;">Email Address</label>
+        <input type="email" placeholder="name@university.edu" style="width:100%; padding:0.8rem; border-radius:var(--radius-sm); border:1px solid var(--gray-300);">
+      </div>
+
+      <div style="margin-bottom:1.5rem;">
+        <label style="display:block; font-weight:600; font-size:0.88rem; margin-bottom:0.3rem;">Password</label>
+        <input type="password" placeholder="••••••••" style="width:100%; padding:0.8rem; border-radius:var(--radius-sm); border:1px solid var(--gray-300);">
+      </div>
+
+      <button class="btn btn-primary" style="width:100%;" onclick="alert('Signed in successfully!'); closeModal('loginModal');">Sign In</button>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a href="#" class="brand-logo" style="color:white;">
+            <i class="fa-solid fa-graduation-cap"></i>
+            <span>EduBridge</span>
+          </a>
+          <p>An enterprise platform connecting university students with active corporate recruitment through skill gap mapping, practice mock tests, and multi-round interview simulations.</p>
+        </div>
+
+        <div>
+          <h4 class="footer-title">Job Categories</h4>
+          <ul class="footer-links">
+            <li><a href="#placements">Full Stack & GenAI</a></li>
+            <li><a href="#placements">Python Backend</a></li>
+            <li><a href="#placements">Cybersecurity</a></li>
+            <li><a href="#placements">AI / ML Engineering</a></li>
+            <li><a href="#placements">Scrum Master & PM</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-title">Assessments</h4>
+          <ul class="footer-links">
+            <li><a href="#mock-interviews">AI Mock Interviews</a></li>
+            <li><a href="#mock-tests">Mock Test Engine</a></li>
+            <li><a href="#resume-matcher">Skill Matcher</a></li>
+            <li><a href="#skill-learning">Learning Roadmaps</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h4 class="footer-title">Enterprise</h4>
+          <ul class="footer-links">
+            <li><a href="#">University Onboarding</a></li>
+            <li><a href="#">Recruiter Portal</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Terms of Service</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <p>&copy; 2026 EduBridge Collaboration & Placement Portal. All rights reserved.</p>
+        <div style="display:flex; gap:1.5rem;">
+          <a href="#"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+          <a href="#"><i class="fa-brands fa-github"></i> GitHub</a>
+          <a href="#"><i class="fa-brands fa-twitter"></i> Twitter</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- JAVASCRIPT LOGIC -->
+  <script>
+    /* ==========================================================================
+       JOB ROLES DATABASE
+       ========================================================================== */
+    const jobRoles = [
+      {
+        id: 1,
+        category: 'genai',
+        title: 'MERN Stack Developer with GenAI Integration',
+        company: 'NextGen Solutions Ltd.',
+        type: 'Placement',
+        ctc: '₹12 - ₹16 LPA',
+        skills: ['React', 'Node.js', 'MongoDB', 'LangChain', 'OpenAI API', 'Vector DB'],
+        icon: 'fa-code',
+        description: 'Design and deploy modern full-stack web applications integrated with Large Language Models, Vector Search (Pinecone), and LangChain agentic workflows.',
+        syllabus: ['React 18 Concurrent Rendering', 'Express REST & GraphQL Microservices', 'Pinecone Vector Indexing', 'RAG Architecture Implementation']
+      },
+      {
+        id: 2,
+        category: 'fullstack',
+        title: 'Senior Full Stack Engineer',
+        company: 'CloudTech Systems',
+        type: 'Placement',
+        ctc: '₹14 - ₹18 LPA',
+        skills: ['TypeScript', 'React 18', 'NestJS', 'PostgreSQL', 'Docker', 'AWS'],
+        icon: 'fa-laptop-code',
+        description: 'Build robust scalable cloud services, write automated integration test suites, manage PostgreSQL database schemas, and deploy containerized apps on AWS ECS.',
+        syllabus: ['TypeScript Advanced Types & Generics', 'NestJS Modular Architecture', 'PostgreSQL Query Optimization', 'Docker Containerization']
+      },
+      {
+        id: 3,
+        category: 'genai',
+        title: 'Generative AI Developer Intern',
+        company: 'AI Innovations Lab',
+        type: 'Internship',
+        ctc: '₹35,000 / month',
+        skills: ['React.js', 'Python FastAPI', 'LlamaIndex', 'TailwindCSS'],
+        icon: 'fa-brain',
+        description: 'Collaborate with senior AI engineers to prototype LLM chat interfaces, implement custom prompt templates, and optimize vector search retrieval.',
+        syllabus: ['FastAPI Asynchronous Routing', 'LlamaIndex Data Loaders', 'Prompt Engineering Patterns', 'Tailwind Responsive Design']
+      },
+      {
+        id: 4,
+        category: 'python',
+        title: 'Python Backend Engineer',
+        company: 'DataFlow Systems',
+        type: 'Placement',
+        ctc: '₹10 - ₹14 LPA',
+        skills: ['Python', 'Django', 'FastAPI', 'Redis', 'PostgreSQL'],
+        icon: 'fa-brands fa-python',
+        description: 'Develop high-throughput REST APIs, implement Redis caching layers for high frequency data retrieval, and optimize relational database models.',
+        syllabus: ['Django ORM & Async Middleware', 'FastAPI Pydantic Validation', 'Redis Caching & Pub/Sub', 'Database Migration Strategies']
+      },
+      {
+        id: 5,
+        category: 'cyber',
+        title: 'Cybersecurity Penetration Tester',
+        company: 'SecureNet Defence',
+        type: 'Placement',
+        ctc: '₹11 - ₹15 LPA',
+        skills: ['Ethical Hacking', 'Kali Linux', 'Burp Suite', 'OWASP Top 10', 'SIEM'],
+        icon: 'fa-shield-halved',
+        description: 'Conduct vulnerability assessments, perform penetration testing on web applications and enterprise networks, and author security compliance reports.',
+        syllabus: ['OWASP Web Application Penetration', 'Metasploit Framework Exploitation', 'Burp Suite Scanner Configuration', 'SIEM Threat Analysis']
+      },
+      {
+        id: 6,
+        category: 'aiml',
+        title: 'Artificial Intelligence / ML Engineer',
+        company: 'DeepMind Robotics',
+        type: 'Placement',
+        ctc: '₹16 - ₹22 LPA',
+        skills: ['PyTorch', 'TensorFlow', 'Computer Vision', 'NLP', 'Model Deployment'],
+        icon: 'fa-robot',
+        description: 'Train machine learning models using PyTorch, build computer vision inspection pipelines, and deploy inference endpoints via ONNX Runtime.',
+        syllabus: ['Deep Learning CNNs & Transformers', 'PyTorch Neural Network Training', 'Model Quantization & Pruning', 'Kubeflow Pipeline Deployment']
+      },
+      {
+        id: 7,
+        category: 'data',
+        title: 'Senior Data Scientist',
+        company: 'Analytics Corp',
+        type: 'Placement',
+        ctc: '₹15 - ₹20 LPA',
+        skills: ['Python', 'Pandas', 'Scikit-Learn', 'Statistical Modeling', 'SQL'],
+        icon: 'fa-chart-pie',
+        description: 'Perform statistical hypothesis testing, build predictive customer churn models, and present data-driven actionable strategies to corporate stakeholders.',
+        syllabus: ['Feature Engineering & Selection', 'Supervised & Unsupervised Learning', 'Time-Series Forecasting', 'Advanced SQL Window Functions']
+      },
+      {
+        id: 8,
+        category: 'agile',
+        title: 'Agile Scrum Master',
+        company: 'Agile Enterprise Solutions',
+        type: 'Placement',
+        ctc: '₹12 - ₹16 LPA',
+        skills: ['Scrum Framework', 'Jira', 'Sprint Planning', 'Conflict Resolution', 'Agile Metrics'],
+        icon: 'fa-users-gear',
+        description: 'Facilitate daily standups, sprint planning, sprint retrospectives, and unblock cross-functional software development teams.',
+        syllabus: ['Agile Manifesto & Scrum Principles', 'Sprint Backlog Estimation (Story Points)', 'Burndown & Velocity Analysis', 'Jira Workflow Automation']
+      }
+    ];
+
+    /* ==========================================================================
+       MOCK TESTS QUESTION BANK
+       ========================================================================== */
+    const testBank = {
+      mern: {
+        title: "Full Stack & MERN Developer Test",
+        questions: [
+          {
+            q: "Which hook should be used in React 18 to perform asynchronous side-effects after DOM updates?",
+            options: ["useMemo", "useEffect", "useLayoutEffect", "useCallback"],
+            correct: 1,
+            exp: "useEffect runs asynchronously after rendering and DOM updates have painted to the screen."
+          },
+          {
+            q: "What is the role of Node.js Event Loop?",
+            options: ["To execute synchronous C++ code", "To handle non-blocking asynchronous I/O operations", "To compile JS into machine code", "To manage multi-threaded CPU tasks"],
+            correct: 1,
+            exp: "The Event Loop allows Node.js to perform non-blocking I/O operations offloading operations to the system kernel."
+          },
+          {
+            q: "Which MongoDB index type is best suited for searching exact field matches inside nested objects?",
+            options: ["Text Index", "Compound / Single Field Index", "2dsphere Index", "Hashed Index"],
+            correct: 1,
+            exp: "Single Field or Compound indexes efficiently match scalar values within sub-documents."
+          },
+          {
+            q: "What does middleware do in Express.js?",
+            options: ["Renders HTML views only", "Executes code, modifies request/response objects, and calls next()", "Directly manages database connections", "Compiles React components"],
+            correct: 1,
+            exp: "Express middleware functions have access to the req and res objects and invoke next() to pass control."
+          },
+          {
+            q: "In RESTful API design, which HTTP method should be idempotent for updating resources?",
+            options: ["POST", "PUT", "PATCH", "DELETE"],
+            correct: 1,
+            exp: "PUT is idempotent, meaning multiple identical requests produce the same state on the server."
+          }
+        ]
+      },
+      genai: {
+        title: "Generative AI & LLM Assessment",
+        questions: [
+          {
+            q: "What is RAG (Retrieval-Augmented Generation)?",
+            options: ["A fine-tuning method for small models", "Combining external document retrieval with an LLM prompt context", "A neural network architecture replacing Transformers", "A prompt compression algorithm"],
+            correct: 1,
+            exp: "RAG retrieves relevant external text snippets from a vector database to provide grounding context to LLM queries."
+          },
+          {
+            q: "What metric is most commonly used to measure distance between vector embeddings?",
+            options: ["Euclidean Distance only", "Cosine Similarity", "Hamming Distance", "Pearson Correlation"],
+            correct: 1,
+            exp: "Cosine similarity measures the angle between vectors, making it ideal for semantic text similarity."
+          },
+          {
+            q: "In LangChain, what is an 'Agent'?",
+            options: ["A simple API wrapper", "A component that uses an LLM to decide a sequence of tools to execute", "A vector store indexer", "A prompt formatter"],
+            correct: 1,
+            exp: "LangChain agents leverage LLMs as reasoning engines to decide which tools (calculators, web search) to invoke."
+          },
+          {
+            q: "What is 'Temperature' in LLM generation sampling?",
+            options: ["The GPU temperature during training", "A parameter controlling randomness/creativity of response tokens", "The length limit of generated output", "The learning rate during fine-tuning"],
+            correct: 1,
+            exp: "Higher temperature values (e.g. 0.8) increase randomness, while lower values (e.g. 0.2) make responses deterministic."
+          },
+          {
+            q: "What is 'Hallucination' in Large Language Models?",
+            options: ["Hardware memory overflow", "Generating plausible-sounding but factually incorrect information", "Infinite loops in token generation", "Slow output latency"],
+            correct: 1,
+            exp: "Hallucination occurs when an LLM produces confident answers unsupported by real factual data."
+          }
+        ]
+      },
+      cyber: {
+        title: "Cybersecurity & Penetration Testing",
+        questions: [
+          {
+            q: "Which vulnerability allows attackers to execute malicious scripts in another user's browser?",
+            options: ["SQL Injection", "Cross-Site Scripting (XSS)", "CSRF", "Buffer Overflow"],
+            correct: 1,
+            exp: "XSS occurs when unvalidated user input is rendered in a browser, executing client-side scripts."
+          },
+          {
+            q: "What is the main function of a SIEM system?",
+            options: ["Encrypting hard drives", "Aggregating and analyzing security log events in real-time", "Filtering web traffic", "Managing passwords"],
+            correct: 1,
+            exp: "SIEM (Security Information and Event Management) correlates log data across systems for threat detection."
+          },
+          {
+            q: "Which port does HTTPS default to?",
+            options: ["80", "22", "443", "8080"],
+            correct: 2,
+            exp: "HTTPS operates securely over TLS/SSL on TCP port 443."
+          },
+          {
+            q: "What attack involves sending targeted fraudulent emails to specific corporate executives?",
+            options: ["Phishing", "Spear Phishing / Whaling", "DDoS", "Man-in-the-Middle"],
+            correct: 1,
+            exp: "Whaling is a targeted spear-phishing attack directed at high-profile executive figures."
+          },
+          {
+            q: "What is 'Zero-Day' vulnerability?",
+            options: ["A vulnerability with zero severity", "A flaw known to vendors for over 100 days", "A security flaw unknown to the vendor with no patch available", "An expired SSL certificate"],
+            correct: 2,
+            exp: "Zero-day vulnerabilities are security flaws unpatched by vendors, leaving zero days of advance defense."
+          }
+        ]
+      },
+      scrum: {
+        title: "Agile Scrum Master Benchmark",
+        questions: [
+          {
+            q: "Who is responsible for prioritizing the Product Backlog?",
+            options: ["Scrum Master", "Development Team", "Product Owner", "Project Manager"],
+            correct: 2,
+            exp: "The Product Owner owns and prioritizes the Product Backlog based on business value."
+          },
+          {
+            q: "What is the recommended maximum duration for a Daily Standup?",
+            options: ["15 Minutes", "30 Minutes", "45 Minutes", "1 Hour"],
+            correct: 0,
+            exp: "Daily Standups are timeboxed to a maximum of 15 minutes."
+          },
+          {
+            q: "What is the primary purpose of a Sprint Retrospective?",
+            options: ["Demonstrate completed work to stakeholders", "Inspect team performance and plan improvements for the next sprint", "Estimate new backlog items", "Assign tasks to developers"],
+            correct: 1,
+            exp: "Retrospectives focus on continuous process improvement and team collaboration."
+          },
+          {
+            q: "What metric tracks the amount of work completed by a team during a Sprint?",
+            options: ["Burn-up Chart", "Velocity", "Cycle Time", "Lead Time"],
+            correct: 1,
+            exp: "Velocity measures the sum of story points completed by the Scrum team per Sprint."
+          },
+          {
+            q: "What does 'Definition of Done' (DoD) signify?",
+            options: ["When code is written", "A shared agreement of criteria required for a product increment to be releasable", "When tests pass on a local machine", "When Product Owner approves user stories"],
+            correct: 1,
+            exp: "DoD provides a universal quality standard indicating when a feature increment is production-ready."
+          }
+        ]
+      }
+    };
+
+    let currentCategory = 'all';
+    let activeTestState = null;
+    let testTimerInterval = null;
+
+    /* ==========================================================================
+       ROLES RENDERING & FILTERING
+       ========================================================================== */
+    function renderRoles(roles) {
+      const container = document.getElementById('rolesContainer');
+      container.innerHTML = '';
+
+      if (roles.length === 0) {
+        container.innerHTML = `
+          <div style="grid-column: 1/-1; text-align:center; padding:3rem; background:white; border-radius:12px; border:1px solid var(--gray-200);">
+            <i class="fa-solid fa-magnifying-glass" style="font-size:2.5rem; color:var(--gray-400); margin-bottom:1rem;"></i>
+            <h3>No matching job roles found</h3>
+            <p style="color:var(--gray-600);">Try searching for alternative skills or selecting another category pill above.</p>
+          </div>
+        `;
+        return;
+      }
+
+      roles.forEach(role => {
+        const badgeClass = role.type === 'Placement' ? 'badge-primary' : 'badge-success';
+        const cardHtml = `
+          <div class="role-card" onclick="openRoleDetails(${role.id})">
+            <div>
+              <div class="role-header">
+                <div class="role-icon-box">
+                  <i class="fa-solid ${role.icon}"></i>
+                </div>
+                <span class="badge ${badgeClass}">${role.type}</span>
+              </div>
+              <h3 class="role-title">${role.title}</h3>
+              <p class="role-company">${role.company}</p>
+              
+              <div class="role-skills-list">
+                ${role.skills.map(s => `<span class="skill-tag">${s}</span>`).join('')}
+              </div>
+            </div>
+
+            <div class="role-footer">
+              <span class="role-ctc">${role.ctc}</span>
+              <button class="btn btn-outline" style="padding:0.4rem 0.9rem; font-size:0.85rem;">View Details</button>
+            </div>
+          </div>
+        `;
+        container.innerHTML += cardHtml;
+      });
+    }
+
+    function filterRoles(category, element) {
+      currentCategory = category;
+      document.querySelectorAll('.pill-btn').forEach(btn => btn.classList.remove('active'));
+      if (element) element.classList.add('active');
+      searchRoles();
+    }
+
+    function searchRoles() {
+      const searchVal = document.getElementById('roleSearch').value.toLowerCase();
+      const typeVal = document.getElementById('typeFilter').value;
+
+      const filtered = jobRoles.filter(role => {
+        const matchCategory = currentCategory === 'all' || role.category === currentCategory;
+        const matchSearch = role.title.toLowerCase().includes(searchVal) ||
+                            role.company.toLowerCase().includes(searchVal) ||
+                            role.skills.some(s => s.toLowerCase().includes(searchVal));
+        const matchType = typeVal === 'all' || role.type === typeVal;
+
+        return matchCategory && matchSearch && matchType;
+      });
+
+      renderRoles(filtered);
+    }
+
+    function openRoleDetails(roleId) {
+      const role = jobRoles.find(r => r.id === roleId);
+      if (!role) return;
+
+      const content = document.getElementById('roleDetailContent');
+      content.innerHTML = `
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:1.2rem;">
+          <div>
+            <span class="badge badge-primary" style="margin-bottom:0.5rem;">${role.type}</span>
+            <h3 style="font-size:1.6rem; font-weight:800;">${role.title}</h3>
+            <p style="color:var(--gray-600); font-weight:600;">${role.company}</p>
+          </div>
+          <span style="font-size:1.2rem; font-weight:800; color:var(--primary);">${role.ctc}</span>
+        </div>
+
+        <div style="margin-bottom:1.5rem;">
+          <h5 style="font-weight:700; margin-bottom:0.4rem;">Role Description</h5>
+          <p style="color:var(--gray-700); font-size:0.95rem;">${role.description}</p>
+        </div>
+
+        <div style="margin-bottom:1.5rem;">
+          <h5 style="font-weight:700; margin-bottom:0.6rem;">Required Skill Competencies</h5>
+          <div style="display:flex; flex-wrap:wrap; gap:0.5rem;">
+            ${role.skills.map(s => `<span class="badge badge-purple">${s}</span>`).join('')}
+          </div>
+        </div>
+
+        <div style="margin-bottom:2rem;">
+          <h5 style="font-weight:700; margin-bottom:0.6rem;">Syllabus & Interview Round Breakdown</h5>
+          <ul style="background:var(--gray-100); padding:1rem 1.2rem; border-radius:8px; font-size:0.9rem;">
+            ${role.syllabus.map(item => `<li style="margin-bottom:0.4rem;"><i class="fa-solid fa-check" style="color:var(--success); margin-right:0.5rem;"></i> ${item}</li>`).join('')}
+          </ul>
+        </div>
+
+        <div style="display:flex; gap:1rem;">
+          <button class="btn btn-primary" style="flex:1;" onclick="alert('Application submitted successfully!'); closeModal('roleDetailModal');">Apply Now</button>
+          <button class="btn btn-secondary" onclick="startInterview('${role.title}')">Practice Interview</button>
+        </div>
+      `;
+
+      openModal('roleDetailModal');
+    }
+
+    /* ==========================================================================
+       MOCK TEST SIMULATOR LOGIC
+       ========================================================================== */
+    function launchLiveTest(testKey) {
+      const data = testBank[testKey];
+      if (!data) return;
+
+      activeTestState = {
+        key: testKey,
+        data: data,
+        answers: {},
+        timeRemaining: 300
+      };
+
+      document.getElementById('testTitle').innerText = data.title;
+      renderTestQuestions();
+      openModal('testModal');
+
+      if (testTimerInterval) clearInterval(testTimerInterval);
+      testTimerInterval = setInterval(updateTestTimer, 1000);
+    }
+
+    function updateTestTimer() {
+      if (!activeTestState) return;
+      activeTestState.timeRemaining--;
+
+      const mins = Math.floor(activeTestState.timeRemaining / 60);
+      const secs = activeTestState.timeRemaining % 60;
+      document.getElementById('testTimer').innerHTML = `<i class="fa-regular fa-clock"></i> ${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+
+      if (activeTestState.timeRemaining <= 0) {
+        clearInterval(testTimerInterval);
+        submitTestAnswers();
+      }
+    }
+
+    function renderTestQuestions() {
+      const container = document.getElementById('testBody');
+      const questions = activeTestState.data.questions;
+
+      let html = `<div style="max-height:60vh; overflow-y:auto; padding-right:0.5rem;">`;
+
+      questions.forEach((q, qIdx) => {
+        html += `
+          <div style="margin-bottom:1.8rem; background:var(--gray-50); padding:1.2rem; border-radius:var(--radius); border:1px solid var(--gray-200);">
+            <h5 style="font-weight:700; font-size:1rem; margin-bottom:0.8rem; color:var(--secondary);">Question ${qIdx + 1}: ${q.q}</h5>
+            <div>
+              ${q.options.map((opt, oIdx) => `
+                <button class="option-btn ${activeTestState.answers[qIdx] === oIdx ? 'selected' : ''}" onclick="selectOption(${qIdx},${oIdx})">
+                  <span>${opt}</span>
+                  <i class="fa-regular ${activeTestState.answers[qIdx] === oIdx ? 'fa-circle-dot' : 'fa-circle'}"></i>
+                </button>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      });
+
+      html += `</div>
+        <button class="btn btn-primary" style="width:100%; margin-top:1rem;" onclick="submitTestAnswers()">Submit Test & Evaluate</button>
+      `;
+
+      container.innerHTML = html;
+    }
+
+    function selectOption(qIdx, oIdx) {
+      activeTestState.answers[qIdx] = oIdx;
+      renderTestQuestions();
+    }
+
+    function submitTestAnswers() {
+      if (testTimerInterval) clearInterval(testTimerInterval);
+
+      const questions = activeTestState.data.questions;
+      let score = 0;
+
+      questions.forEach((q, qIdx) => {
+        if (activeTestState.answers[qIdx] === q.correct) score++;
+      });
+
+      const percentage = Math.round((score / questions.length) * 100);
+      const container = document.getElementById('testBody');
+
+      let html = `
+        <div style="text-align:center; margin-bottom:1.5rem;">
+          <span class="badge ${percentage >= 70 ? 'badge-success' : 'badge-warning'}" style="font-size:1rem; padding:0.5rem 1rem;">
+            Score: ${score} / ${questions.length} (${percentage}%)
+          </span>
+          <h4 style="font-size:1.3rem; font-weight:800; margin-top:0.8rem;">${percentage >= 70 ? 'Excellent Performance!' : 'Skill Gap Identified'}</h4>
+          <p style="font-size:0.9rem; color:var(--gray-600);">Review the answer explanations below to strengthen your subject clarity.</p>
+        </div>
+
+        <div style="max-height:50vh; overflow-y:auto; padding-right:0.5rem;">
+      `;
+
+      questions.forEach((q, qIdx) => {
+        const userAns = activeTestState.answers[qIdx];
+        const isCorrect = userAns === q.correct;
+
+        html += `
+          <div style="margin-bottom:1.5rem; padding:1rem; border-radius:var(--radius-sm); border:1px solid ${isCorrect ? 'var(--success)' : 'var(--danger)'}; background:white;">
+            <p style="font-weight:700; font-size:0.95rem; margin-bottom:0.5rem;">Q${qIdx + 1}: ${q.q}</p>
+            <p style="font-size:0.88rem; color:${isCorrect ? '#15803d' : 'var(--danger)'}; font-weight:600;">
+              Your Answer: ${userAns !== undefined ? q.options[userAns] : 'Not Answered'} ${isCorrect ? '<i class="fa-solid fa-check"></i>' : '<i class="fa-solid fa-xmark"></i>'}
+            </p>
+            ${!isCorrect ? `<p style="font-size:0.88rem; color:#15803d; font-weight:600;">Correct Answer: ${q.options[q.correct]}</p>` : ''}
+            <p style="font-size:0.85rem; color:var(--gray-600); margin-top:0.4rem; background:var(--gray-100); padding:0.5rem; border-radius:4px;">
+              <strong>Explanation:</strong> ${q.exp}
+            </p>
+          </div>
+        `;
+      });
+
+      html += `</div>
+        <button class="btn btn-primary" style="width:100%; margin-top:1rem;" onclick="closeModal('testModal')">Close Evaluation</button>
+      `;
+
+      container.innerHTML = html;
+    }
+
+    /* ==========================================================================
+       RESUME SKILL MATCHER ENGINE
+       ========================================================================== */
+    function analyzeSkillMatch() {
+      const selectedProfile = document.getElementById('targetProfileSelect').value;
+      const text = document.getElementById('userSkillsInput').value.toLowerCase();
+      const resultBox = document.getElementById('matcherResultBox');
+
+      if (!text.trim()) {
+        alert('Please paste your resume text or skill keywords before running analysis.');
+        return;
+      }
+
+      const role = jobRoles.find(r => r.title === selectedProfile) || jobRoles[0];
+      const requiredSkills = role.skills;
+      
+      let matched = [];
+      let missing = [];
+
+      requiredSkills.forEach(s => {
+        if (text.includes(s.toLowerCase())) {
+          matched.push(s);
+        } else {
+          missing.push(s);
+        }
+      });
+
+      const matchRatio = Math.round((matched.length / requiredSkills.length) * 100);
+
+      resultBox.innerHTML = `
+        <div style="text-align:center; margin-bottom:1rem;">
+          <div style="width:90px; height:90px; border-radius:50%; background:var(--primary-light); color:var(--primary); display:flex; align-items:center; justify-content:center; font-size:1.8rem; font-weight:800; margin:0 auto 0.8rem;">
+            ${matchRatio}%
+          </div>
+          <h4 style="font-weight:800; font-size:1.15rem;">Match Score for ${role.title}</h4>
+        </div>
+
+        <div style="margin-bottom:1rem;">
+          <h6 style="font-weight:700; color:#15803d; margin-bottom:0.4rem;"><i class="fa-solid fa-circle-check"></i> Matched Skills (${matched.length})</h6>
+          <div style="display:flex; flex-wrap:wrap; gap:0.4rem;">
+            ${matched.length ? matched.map(s => `<span class="badge badge-success">${s}</span>`).join('') : '<span style="font-size:0.85rem; color:var(--gray-600);">No skills matched</span>'}
+          </div>
+        </div>
+
+        <div style="margin-bottom:1.2rem;">
+          <h6 style="font-weight:700; color:var(--danger); margin-bottom:0.4rem;"><i class="fa-solid fa-circle-xmark"></i> Missing Key Skills (${missing.length})</h6>
+          <div style="display:flex; flex-wrap:wrap; gap:0.4rem;">
+            ${missing.length ? missing.map(s => `<span class="badge" style="background:var(--danger-light); color:var(--danger);">${s}</span>`).join('') : '<span style="font-size:0.85rem; color:var(--gray-600);">None! Fully aligned.</span>'}
+          </div>
+        </div>
+
+        <button class="btn btn-outline" style="width:100%; font-size:0.85rem;" onclick="location.href='#skill-learning'">Bridge Missing Skills</button>
+      `;
+    }
+
+    /* ==========================================================================
+       COURSE CURRICULUM MODAL
+       ========================================================================== */
+    function openCourseDetails(courseName) {
+      document.getElementById('courseTitle').innerText = courseName;
+      const list = document.getElementById('courseModulesList');
+
+      list.innerHTML = `
+        <div style="background:var(--gray-50); padding:1rem; border-radius:8px; margin-bottom:0.8rem;">
+          <h5 style="font-weight:700;">Module 1: Foundation & Architectural Principles</h5>
+          <p style="font-size:0.88rem; color:var(--gray-600);">Core concepts, component structures, and setup of development environments.</p>
+        </div>
+        <div style="background:var(--gray-50); padding:1rem; border-radius:8px; margin-bottom:0.8rem;">
+          <h5 style="font-weight:700;">Module 2: Advanced Practical Implementation</h5>
+          <p style="font-size:0.88rem; color:var(--gray-600);">Building real-world features, API integrations, and database operations.</p>
+        </div>
+        <div style="background:var(--gray-50); padding:1rem; border-radius:8px;">
+          <h5 style="font-weight:700;">Module 3: Industry Testing & Cloud Deployment</h5>
+          <p style="font-size:0.88rem; color:var(--gray-600);">Containerization, CI/CD pipeline creation, performance tuning, and security audits.</p>
+        </div>
+      `;
+
+      openModal('courseModal');
+    }
+
+    /* ==========================================================================
+       INTERVIEW LAUNCHER LOGIC
+       ========================================================================== */
+    function startInterview(trackName) {
+      document.getElementById('modalTrackTitle').innerText = trackName + ' - Live Simulation';
+      openModal('interviewModal');
+    }
+
+    function nextInterviewQuestion() {
+      document.getElementById('intQTitle').innerText = 'Question 2: System Architecture & Scalability';
+      document.getElementById('intQText').innerText = 'How do you design a database caching layer with Redis to prevent cache stampede during traffic spikes?';
+      document.getElementById('intAnswerInput').value = '';
+    }
+
+    function submitInterviewAnswer() {
+      alert('Your interview answers have been submitted for automated AI feedback scoring!');
+      closeModal('interviewModal');
+    }
+
+    /* MODAL HELPERS */
+    function openModal(id) { document.getElementById(id).classList.add('active'); }
+    function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+
+    /* INIT ON LOAD */
+    window.onload = function() {
+      renderRoles(jobRoles);
+    };
+  </script>
+</body>
+</html>
